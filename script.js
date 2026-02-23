@@ -253,3 +253,32 @@ gsap.to(".imagecompetences img", {
   stagger: 0.2, // chaque image apparaît 0.3s après la précédente
   ease: "power2.out",
 });
+
+// Menu Burger
+
+const burger = document.querySelector(".burger");
+const navbar = document.querySelector(".navbar");
+const overlay = document.querySelector(".overlay");
+
+// Ouvrir / fermer menu burger
+burger.addEventListener("click", () => {
+  burger.classList.toggle("active"); // X
+  navbar.classList.toggle("active"); // menu visible
+  overlay.classList.toggle("active"); // fond flou
+});
+
+// Fermer menu si on clique sur le fond flou
+overlay.addEventListener("click", () => {
+  burger.classList.remove("active");
+  navbar.classList.remove("active");
+  overlay.classList.remove("active");
+});
+
+// Fermer le menu quand on clique sur un lien de la navbar
+navbar.querySelectorAll("a").forEach((link) => {
+  link.addEventListener("click", () => {
+    burger.classList.remove("active");
+    navbar.classList.remove("active");
+    overlay.classList.remove("active");
+  });
+});

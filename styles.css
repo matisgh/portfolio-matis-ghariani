@@ -75,6 +75,7 @@ header p {
   font-family: "Geist-Light";
   font-size: 1.7rem;
   color: var(--white);
+  z-index: 1000; /* positionne par dessus tout */
 }
 
 .navbar {
@@ -82,6 +83,9 @@ header p {
   justify-content: space-between;
   width: 50%; /* la navbar (tout les a) commence a partir du milieu */
   font-family: "Geist-Light";
+  position: static; /* pas fixed en desktop */
+  opacity: 1; /* visible */
+  transform: none; /* pas de transformation */
 }
 
 .navbar a {
@@ -93,6 +97,49 @@ header p {
 .navbar a:hover {
   /* :hover se produit quand on mais la sourie sur un element */
   color: var(--blue);
+}
+
+/* -------- Burger & Overlay -------- */
+.burger {
+  display: none; /* caché en desktop */
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.burger span {
+  width: 28px;
+  height: 3px;
+  background-color: var(--white);
+  border-radius: 5px;
+}
+
+/* Animation du X */
+.burger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(0, 9px);
+}
+
+.burger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.burger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(3px, -13px);
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.3s ease;
+}
+
+.overlay.active {
+  opacity: 1;
+  pointer-events: all;
 }
 
 /* Acceuil */
@@ -437,19 +484,54 @@ footer {
   /* Header */
 
   header {
-    display: block; /* occupent toute la largeur disponible */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 20px 40px;
+    position: relative;
+    position: sticky; /* reste sur l'ecran quand on scroll */
+  }
+
+  .burger {
+    display: flex; /* visible en mobile */
+
+    z-index: 1001; /* burger toujours au-dessus de navbar et overlay */
   }
 
   .navbar {
+    pointer-events: none; /* désactive tous les liens quand menu fermé */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
     flex-direction: column;
-    align-items: flex-end;
-    gap: 15px;
-    width: 100%; /* Permet d'etre responsive au niveau de la largeur */
+    gap: 30px;
+    text-align: center;
+    opacity: 0;
+    transition: 0.3s ease;
+
+    z-index: 999; /* en dessous du header et du burger */
   }
 
   .navbar a {
     font-size: 1rem;
+  }
+
+  /* Quand actif (burger cliqué) */
+  .navbar.active {
+    pointer-events: all; /* rend les liens cliquables seulement quand menu ouvert */
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  /* Overlay */
+  .overlay {
+    z-index: 998; /* toujours derrière le header et navbar */
+  }
+
+  /* Overlay actif */
+  .overlay.active {
+    opacity: 1;
   }
 
   /* Acceuil */
